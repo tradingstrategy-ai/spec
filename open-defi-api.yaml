@@ -247,7 +247,7 @@ paths:
           required: false
           schema:
             type: string
-          example: "0x0123456789aBcDe0123456789AbCdE0123456789"
+#          example: "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f"
 
 
         - name: sort
