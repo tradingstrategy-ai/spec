@@ -921,14 +921,6 @@ paths:
             maximum: 100000000
           example: 25000000
 
-        - name: exchange_type
-          in: query
-          description: Exchange type enum - see https://tradingstrategy.ai/docs/programming/api/client/help/tradingstrategy.exchange.ExchangeType.html
-          required: false
-          schema:
-            type: string
-          example: uni_v2
-
       tags:
         - Trading pair
       responses:
