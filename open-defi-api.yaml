@@ -1342,6 +1342,12 @@ components:
           description: URL slug for the exchange
           type: string
           example: uniswap_v2
+        exchange_type:
+          description: |
+            Type of the exchange, one of Exchange type enum values.
+            See: https://tradingstrategy.ai/docs/programming/api/client/help/tradingstrategy.exchange.ExchangeType.html
+          type: string
+          example: "uniswap_v2"
         chain_slug:
           description: URL slug for the blockchain on which this exchange runs
           type: string
@@ -1360,11 +1366,6 @@ components:
           type: string
           minLength: 4
           example: 0x0
-        exchange_type:
-          description: Exchange type enum - see https://tradingstrategy.ai/docs/programming/api/client/help/tradingstrategy.exchange.ExchangeType.html
-          type: string
-          minLength: 4
-          example: uni_v2
         usd_volume_30d:
           description: USD volume for the last 30 days
           type: number
@@ -1382,6 +1383,25 @@ components:
           type: string
           minLength: 4
           example: uniswap_v2
+        chain_name:
+          description: |
+            Human-readable name of the blockchain
+          type: string
+          example: "Ethereum"
+        chain_slug:
+          description: URL slug for the blockchain on which this exchange runs
+          type: string
+          example: "ethereum"
+        exchange_slug:
+          description: URL slug for the exchange
+          type: string
+          example: "uniswap_v2"
+        exchange_type:
+          description: |
+            Type of the exchange, one of Exchange type enum values.
+            See: https://tradingstrategy.ai/docs/programming/api/client/help/tradingstrategy.exchange.ExchangeType.html
+          type: string
+          example: "uniswap_v2"
         human_readable_name:
           description: Human readable name for this exchange
           type: string
@@ -1500,6 +1520,12 @@ components:
             Human readable name of the exchange
           type: string
           example: Uniswap v2
+        exchange_type:
+          description: |
+            Type of the exchange, one of Exchange type enum values.
+            See: https://tradingstrategy.ai/docs/programming/api/client/help/tradingstrategy.exchange.ExchangeType.html
+          type: string
+          example: "uniswap_v2"
         chain_name:
           description: |
             Human-readable name of the blockchain
