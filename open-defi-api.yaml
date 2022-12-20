@@ -1500,6 +1500,12 @@ components:
             Human readable name of the exchange
           type: string
           example: Uniswap v2
+        exchange_type:
+          description: |
+            Type of the exchange, one of Exchange type enum values.
+            See: https://tradingstrategy.ai/docs/programming/api/client/help/tradingstrategy.exchange.ExchangeType.html
+          type: string
+          example: "uniswap_v2"
         chain_name:
           description: |
             Human-readable name of the blockchain
