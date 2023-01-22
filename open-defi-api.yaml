@@ -626,6 +626,72 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GenericErrorModel"
+  '/trading-pair-data-availability':
+    x-pyramid-route-name: web_candle_data_availability
+    get:
+      operationId: web_candle_data_availability
+      summary:  Get the information from the oracle about the availability of the trading pair data
+      description: |
+
+        Fetch the latest updated timestamp for multiple trading pairs.
+        
+        Because Trading Strategy oracle does not generate empty candles in the case there are no trades,
+        we need to have another mean to check if the server has up-to-date
+        data where a Trading Strategy can take a decision on. This is to distinguish between the situation
+        of data not yet updated and no data (no trades were made during the period).
+        
+        This endpoint gives you the result of trading pair data availability 
+        for multiple pairs.
+
+      parameters:
+        - name: pair_ids
+          in: query
+          description: |
+
+            Trading pair ids.
+
+            Trading pair ids are not stable. Translate your trading pair symbolic tickers by using `/pair-details` endpoint
+            before calling this API.
+            
+            The server has a maximum number of trading pairs it will serve in one request 
+            and will give you an error if you try to ask too many trading pairs once.
+
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: integer
+            uniqueItems: true
+
+        - name: time_bucket
+          in: query
+          description: >
+
+              What time bucket to use for the candle time frame.
+
+          required: true
+          schema:
+            type: string
+            enum: [1m, 5m, 15m, 1h, 4h, 1d, 7d, 30d]
+          example: 1h
+
+      tags:
+        - Trading pair
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TradingPairDataAvailabilityList'
+        "422":
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorModel"
 
   '/candles':
     x-pyramid-route-name: web_candles
@@ -2436,3 +2502,59 @@ components:
             Number of indexed exchanges
           type: integer
           example: 10
+
+    TradingPairDataAvailability:
+        description: |
+          
+          The up-to-date data status for a single trading pair.
+          
+          Note that due to minor chain reorganisation, the status of this 
+          data may change depsite it seen final in some point.
+
+        type: object
+        properties:
+          chain_id:
+            description: |
+              Chain id of the pair
+            type: integer
+          pool_address:
+            description: |
+              The pair smart contract address.
+              
+              Pair address or pool address depending on the underlying exchange.
+            type: string
+            minLength: 4
+            example: 0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f
+            format: Ethereum address
+
+        pair_id:
+          description: |
+            The internal id for the trading pair.
+            
+            Internal primary key id. May change over long period of time, so please use 
+            (chain id, pool address) tuples for long term permanent ids.
+
+          type: integer
+          example: 1
+
+        updated_at:
+          description: |
+
+            The timestamp of the last written candle.
+            
+            It is safe to read candle data older than this timestamp,
+            inclusive to the timestamp.
+
+          type: string
+          format: iso8601
+          example: 2021-10-01T12:00
+
+
+    TradingPairDataAvailabilityList:
+      description: |
+
+        Trading pair data availability result for multiple trading pairs.
+
+      type: array
+      items:
+        $ref: '#/components/schemas/TradingPairDataAvailability'
