@@ -627,9 +627,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/GenericErrorModel"
   '/trading-pair-data-availability':
-    x-pyramid-route-name: web_candle_data_availability
+    x-pyramid-route-name: web_trading_pair_data_availability
     get:
-      operationId: web_candle_data_availability
+      operationId: web_trading_pair_data_availability
       summary:  Get the information from the oracle about the availability of the trading pair data
       description: |
 
