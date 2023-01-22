@@ -820,7 +820,11 @@ paths:
         by `max_bytes` parameter. If the response reaches more than 
         `max_bytes` in length it is terminated with JSON object
         `{"error": true, "max_bytes_reached": served_bytes}`.
-        The highest value, and response length, you can ask is 100M bytes. 
+        The highest value, and response length, you can ask is 100M bytes.
+        
+        Because Trading Strategy oracle does not generate empty candles when there are no trades,
+        you might want to distinguish no data yet available and no trade situations
+        using `/trading-pair-data-availability` endpoint.
           
         **TODO**: Specify the actual per-line JSONL format in OpenAPI schema.
         
@@ -2527,28 +2531,58 @@ components:
             example: 0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f
             format: Ethereum address
 
-        pair_id:
-          description: |
-            The internal id for the trading pair.
-            
-            Internal primary key id. May change over long period of time, so please use 
-            (chain id, pool address) tuples for long term permanent ids.
+          pair_id:
+            description: |
+              The internal id for the trading pair.
+              
+              Internal primary key id. May change over long period of time, so please use 
+              (chain id, pool address) tuples for long term permanent ids.
 
-          type: integer
-          example: 1
+            type: integer
+            example: 1
 
-        updated_at:
-          description: |
+          last_candle_at:
+            description: |
+  
+              The timestamp of the last written candle.
+              
+              It is safe to read candle data older than this timestamp,
+              inclusive to the timestamp.
+              
+              Unless there are trades happened, there won't be a new candle.
 
-            The timestamp of the last written candle.
-            
-            It is safe to read candle data older than this timestamp,
-            inclusive to the timestamp.
+            type: string
+            format: iso8601
+            example: 2021-10-01T12:00
 
-          type: string
-          format: iso8601
-          example: 2021-10-01T12:00
+          last_trade_at:
+            description: |
+  
+              The timestamp of the last written trade.
+              
+              Trades may not appear in the candles until the candle timeframe is complete.
 
+            type: string
+            format: iso8601
+            example: 2021-10-01T12:00
+
+          last_block_number:
+            description: |
+  
+              The last read block header number of the underlying blockchain
+
+            type: string
+            format: integer
+            example: 130000000
+
+          last_block_at:
+            description: |
+  
+              The timestamp of the last read block header number.
+
+            type: string
+            format: iso8601
+            example: 2021-10-01T12:00
 
     TradingPairDataAvailabilityList:
       description: |
