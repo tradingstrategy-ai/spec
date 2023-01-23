@@ -2521,7 +2521,7 @@ components:
             description: |
               Chain id of the pair
             type: integer
-          pool_address:
+          pair_address:
             description: |
               The pair smart contract address.
               
