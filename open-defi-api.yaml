@@ -1717,6 +1717,11 @@ components:
             as a percentage, multiply this value by 100.
           type: number
           example: 0.0025
+        pool_swap_fee:
+          description: |
+            An alias for `pair_swap_fee` for backward compatibility.
+          type: number
+          example: 0.0025
 
     PaginatedPairSummary:
       description: >
