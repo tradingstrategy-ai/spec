@@ -1710,6 +1710,13 @@ components:
           type: string
           example: xyliquidity
           enum: [xyliquidity]
+        pair_swap_fee:
+          description: |
+            The estimated fee when trading the pair on the exchange it is listed on.
+            The fee is expressed as a floating point number. To obtain the fee expressed
+            as a percentage, multiply this value by 100.
+          type: number
+          example: 0.0025
 
     PaginatedPairSummary:
       description: >
