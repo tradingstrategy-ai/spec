@@ -1435,7 +1435,7 @@ components:
           description: Ethereum address, non-checksummed, for the exchange factory
           type: string
           minLength: 4
-          example: 0x0
+          example: "0x0"
         usd_volume_30d:
           description: USD volume for the last 30 days
           type: number
@@ -1472,6 +1472,11 @@ components:
             See: https://tradingstrategy.ai/docs/programming/api/client/help/tradingstrategy.exchange.ExchangeType.html
           type: string
           example: "uniswap_v2"
+        liquidity_type:
+          description: What kind of liquidity measurement is used
+          type: string
+          example: xyliquidity
+          enum: [xyliquidity, uniswap-v3-style-concentrated-liquidity]
         human_readable_name:
           description: Human readable name for this exchange
           type: string
@@ -1494,7 +1499,7 @@ components:
           example: https://etherscan.io/address/0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f
         address:
           description: The factory address for Uniswap AMM like setups
-          example: 0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f
+          example: "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f"
         buy_volume_30d:
           description: Buy USD volume for the last 30 days
           type: number
@@ -1636,12 +1641,12 @@ components:
           description: Smart contract address of the base token
           type: string
           format: Ethereum address
-          example: 0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f
+          example: "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f"
         quote_token_address:
           description: Smart contract address of the quote token
           type: string
           format: Ethereum address
-          example: 0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f
+          example: "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f"
         base_token_slug:
           type: string
           description: >
@@ -1656,7 +1661,7 @@ components:
           description: Pool contract address
           type: string
           minLength: 4
-          example: 0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f
+          example: "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f"
           format: Ethereum address
         exchange_rate:
           description: |
@@ -1706,7 +1711,7 @@ components:
           type: number
           example: 120000
         liquidity_type:
-          description: What of liquidity measurement is used
+          description: What kind of liquidity measurement is used
           type: string
           example: xyliquidity
           enum: [xyliquidity]
@@ -2540,7 +2545,7 @@ components:
               Pair address or pool address depending on the underlying exchange.
             type: string
             minLength: 4
-            example: 0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f
+            example: "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f"
             format: Ethereum address
 
           pair_id:
