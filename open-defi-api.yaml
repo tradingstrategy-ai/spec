@@ -1472,6 +1472,11 @@ components:
             See: https://tradingstrategy.ai/docs/programming/api/client/help/tradingstrategy.exchange.ExchangeType.html
           type: string
           example: "uniswap_v2"
+        liquidity_type:
+          description: What kind of liquidity measurement is used
+          type: string
+          example: xyliquidity
+          enum: [xyliquidity, uniswap-v3-style-concentrated-liquidity]
         human_readable_name:
           description: Human readable name for this exchange
           type: string
@@ -1706,7 +1711,7 @@ components:
           type: number
           example: 120000
         liquidity_type:
-          description: What of liquidity measurement is used
+          description: What kind of liquidity measurement is used
           type: string
           example: xyliquidity
           enum: [xyliquidity]
