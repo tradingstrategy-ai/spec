@@ -2,7 +2,7 @@
 
 Decentralised trading data API in [OpenAPI 3 standard](https://swagger.io/specification/). 
 
-**Beta warning**: Do not use at your own risk.
+**Beta warning**: Use at your own risk. The API is not 100% ready yet.
 
 This repository contains OpenAPI 3 specifications for two APIs
 
