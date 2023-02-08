@@ -110,10 +110,13 @@ tags:
     description: Data about trading pair
   - name: Trading signal
     description: Data about trading signals
-  - name: Telemetry
-    description: |
-      Storing events of interest pertaining to the TradingStrategy ecosystem,
-      such as user iteractions with the charts on the website.
+  # Telemetry tag commented out, because its only ednpoitn /activity is commented out.
+  # We do not publicly advertise that endpoint, and we do not want an empty tag group.
+  #
+  # - name: Telemetry
+  #   description: |
+  #     Storing events of interest pertaining to the TradingStrategy ecosystem,
+  #     such as user iteractions with the charts on the website.
 
 servers:
   - url: 'https://tradingstrategy.ai/api/'
