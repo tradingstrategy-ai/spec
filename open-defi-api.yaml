@@ -2435,6 +2435,11 @@ components:
         Information about a reserve in a lending protocol.
 
       properties:
+        protocol_slug:
+          description: >
+            The slug of the lending protocol the reserve is a part of.
+          type: string
+          example: "aave_v3"
         reserve_slug:
           description: >
             The slug of the asset held by the reserve.
