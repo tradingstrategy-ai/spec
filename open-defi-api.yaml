@@ -1328,6 +1328,46 @@ paths:
               schema:
                 $ref: "#/components/schemas/GenericErrorModel"
 
+  '/reserve/details':
+    x-pyramid-route-name: web_reserve_details
+    get:
+      operationId: web_reserve_details
+      summary: |
+        Information about a particular reserve in a lending pool.
+      parameters:
+        - name: protocol_slug
+          in: query
+          description: The slug of the lending protocol.
+          required: true
+          schema:
+            type: string
+          example: "aave_v3"
+        - name: reserve_slug
+          in: query
+          description: >
+            The slug of the asset held by the reserve.
+          required: true
+          schema:
+            type: string
+          example: "wmatic"
+      tags:
+        - Lending protocol
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReserveInfo'
+        '404':
+          description: Reserve not found
+        "422":
+          description: Unexpected error - usually bad query input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorModel"
+
   '/top-momentum':
     x-pyramid-route-name: web_top_momentum
     get:
