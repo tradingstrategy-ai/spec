@@ -1312,6 +1312,33 @@ paths:
             default: 20
             minimum: 1
             maximum: 1000
+        - name: sort
+          in: query
+          description: |
+
+            What kind of sort options is available for the output.
+
+            The default `reserve_slug` sorts the reserves by their slug in ascending order.
+
+          required: false
+          schema:
+            type: string
+            default: reserve_slug
+            enum: [
+              reserve_slug, asset_name, asset_symbol, atoken_id, stable_debt_token_id,
+              variable_debt_token_id, interest_rate_strategy_address
+            ]
+        - name: direction
+          in: query
+          description: |
+            Sort order:
+             * `asc` - Ascending, from lowest to highest
+             * `desc` - Descending, from highest to lowest
+          required: false
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: asc
       responses:
         "200":
           description: OK
