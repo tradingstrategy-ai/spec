@@ -1326,7 +1326,7 @@ paths:
             default: reserve_slug
             enum: [
               reserve_slug, asset_name, asset_symbol, atoken_id, stable_debt_token_id,
-              variable_debt_token_id, interest_rate_strategy_address
+              variable_debt_token_id
             ]
         - name: direction
           in: query
