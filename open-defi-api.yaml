@@ -108,6 +108,8 @@ tags:
     description: Data about tokens living on blockchains
   - name: Trading pair
     description: Data about trading pair
+  - name: Lending protocol
+    description: Data about decentralized lending protocols
   - name: Trading signal
     description: Data about trading signals
   # Telemetry tag commented out, because its only ednpoitn /activity is commented out.
@@ -1271,6 +1273,60 @@ paths:
               schema:
                 $ref: "#/components/schemas/GenericErrorModel"
 
+  '/reserves':
+    x-pyramid-route-name: web_reserves
+    get:
+      operationId: web_reserves
+      summary:
+          Get a list of reserves for a particular lending protocol.
+      description: |
+        A decentralized lending protocol such as AAVE v3 consists of multiple
+        reserves, one for each asset type that is being lent / borrowed. A reserve
+        is a "pile" of a particular asset, which provides liquidity for the lending /
+        borrowing activities.
+      tags:
+        - Lending protocol
+      parameters:
+        - name: protocol_slug
+          in: query
+          description: The slug of the lending protocol.
+          required: true
+          schema:
+            type: string
+          example: "aave_v3"
+        - name: page
+          in: query
+          description: Page number, zero-indexed
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+            maximum: 1000
+        - name: page_size
+          in: query
+          description: Limit the number of reserves returned in each result page.
+          required: false
+          schema:
+            type: integer
+            default: 20
+            minimum: 1
+            maximum: 1000
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedReserveInfo'
+        "404":
+          description: No reserve data found for the lending protocol.
+        "422":
+          description: Unexpected error - usually bad query input.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorModel"
 
   '/top-momentum':
     x-pyramid-route-name: web_top_momentum
@@ -2354,6 +2410,79 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TokenOnChainInfo'
+
+    PaginatedReserveInfo:
+      description: >
+          Iterate through a list of ReserveInfo responses.
+
+      properties:
+        total:
+          description: Total results entries
+          type: integer
+          example: 100
+        pages:
+          description: Total result pages
+          type: integer
+          example: 10
+        results:
+          description: One page of reserves info
+          type: array
+          items:
+            $ref: '#/components/schemas/ReserveInfo'
+
+    ReserveInfo:
+      description: >
+        Information about a reserve in a lending protocol.
+
+      properties:
+        protocol_slug:
+          description: >
+            The slug of the lending protocol the reserve is a part of.
+          type: string
+          example: "aave_v3"
+        reserve_slug:
+          description: >
+            The slug of the asset held by the reserve.
+          type: string
+          example: "wmatic"
+        chain_slug:
+          description: >
+            The slug of the chain hosting the reserve.
+          type: string
+          example: "polygon"
+        asset_name:
+          description: >
+            The name of the asset held by the reserve.
+          type: string
+          example: "Wrapped Matic"
+        asset_symbol:
+          description: >
+            The trading symbol of the asset held by the reserve.
+          type: string
+          example: "WMATIC"
+        atoken_id:
+          description: >
+            The internal ID of the aToken representing a stake in the reserve.
+          type: integer
+          example: 851
+        stable_debt_token_id:
+          description: >
+            The internal ID of the token representing a debt to the protocol
+            with a stable interest rate.
+          type: integer
+          example: 860
+        variable_debt_token_id:
+          description: >
+            The internal ID of the token representing a debt to the protocol
+            with a variable interest rate.
+          type: integer
+          example: 863
+        interest_rate_strategy_address:
+          description: >
+            An address of the smart contract governing  interest rate strategy.
+          type: string
+          format: address
+          example: "0x03733F4E008D36F2E37F0080FF1C8DF756622E6F"
 
     TopMomentum:
       description: >
