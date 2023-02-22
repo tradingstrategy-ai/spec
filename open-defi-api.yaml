@@ -1324,10 +1324,7 @@ paths:
           schema:
             type: string
             default: reserve_slug
-            enum: [
-              reserve_slug, asset_name, asset_symbol, atoken_id, stable_debt_token_id,
-              variable_debt_token_id
-            ]
+            enum: [reserve_slug, asset_name, asset_symbol]
         - name: direction
           in: query
           description: |
