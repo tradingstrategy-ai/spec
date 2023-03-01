@@ -596,10 +596,10 @@ paths:
         - name: filter_junk
           in: query
           description: |
-             Get rid of token symbol duplicates.
+             Omit pairs that do not match the "quality" criteria from results.
             
-             If there are multiple token pairs with matching symbols in the result,
-             choose one with the highest volume and hide the others.
+             For example, one of the criteria if a pair is eligible to be listed in the
+             results is sufficient trading activity with the pair.
           required: false
           schema:
             type: boolean
