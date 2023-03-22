@@ -162,11 +162,20 @@ paths:
       tags:
         - Blockchain
       parameters:
+        - name: chain_id
+          in: query
+          description: |
+            Blockchain ID, e.g, `1` for Ethereum mainnet
+          required: true
+          schema:
+            type: integer
+          example: 1
         - name: chain_slug
           in: query
           description: |
             Blockchain slug, e.g, `ethereum` for Ethereum mainnet
-          required: true
+            Note: if both `chain_id` and `chain_slug` are given, only `chain_id` will be used
+          required: false
           schema:
             type: string
           example: ethereum
@@ -2610,7 +2619,7 @@ components:
           example: https://ethereum.org
         chain_logo:
           description: |
-            Direct link to the logo of the exchange.
+            Direct link to the logo of the blockchain.
 
             Either SVG or high resh PNG.
 
@@ -2620,6 +2629,11 @@ components:
 
           type: string
           example: https://upload.wikimedia.org/wikipedia/commons/0/05/Ethereum_logo_2014.svg
+        chain_explorer:
+          description: |
+            URL of the blockchain's block explorer
+          type: string
+          example: https://etherscan.io/
         start_block:
           description: |
             First block indexed
