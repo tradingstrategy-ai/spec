@@ -593,10 +593,10 @@ paths:
             type: string
             enum: [unfiltered, min_liquidity_100k, min_liquidity_1M]
             default: min_liquidity_1M
-        - name: filter_junk
+        - name: eligible_only
           in: query
           description: |
-             Omit pairs that do not match the "quality" criteria from results.
+             If true, omit pairs that do not match the "quality" criteria from results.
             
              For example, one of the criteria if a pair is eligible to be listed in the
              results is sufficient trading activity with the pair.
