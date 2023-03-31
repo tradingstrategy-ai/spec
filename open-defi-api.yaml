@@ -1366,7 +1366,7 @@ paths:
     get:
       operationId: web_reserve_details
       summary: |
-        Information about a particular reserve in a lending pool.
+        Information about a particular reserve in a lending protocol.
       parameters:
         - name: protocol_slug
           in: query
@@ -1383,6 +1383,14 @@ paths:
           schema:
             type: string
           example: "wmatic"
+        - name: chain_slug
+          in: query
+          description: >
+            URL slug of the blockchain on which the lending protocol runs.
+          required: true
+          schema:
+            type: string
+          example: "polygon"
       tags:
         - Lending protocol
       responses:
