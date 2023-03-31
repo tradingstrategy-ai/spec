@@ -2538,18 +2538,36 @@ components:
             The internal ID of the aToken representing a stake in the reserve.
           type: integer
           example: 851
+        atoken_address:
+          description: >
+            The contract address of the aToken.
+          type: string
+          format: address
+          example: "0x6d80113e533a2c0fe82eabd35f1875dcea89ea97"
         stable_debt_token_id:
           description: >
             The internal ID of the token representing a debt to the protocol
             with a stable interest rate.
           type: integer
           example: 860
+        stable_debt_token_address:
+          description: >
+            The contract address of the stable debt interest token.
+          type: string
+          format: address
+          example: "0xf15f26710c827dde8acba678682f3ce24f2fb56e"
         variable_debt_token_id:
           description: >
             The internal ID of the token representing a debt to the protocol
             with a variable interest rate.
           type: integer
           example: 863
+        variable_debt_token_address:
+          description: >
+            The contract address of the variable debt interest token.
+          type: string
+          format: address
+          example: "0x4a1c3ad6ed28a636ee1751c69071f6be75deb8b8"
         interest_rate_strategy_address:
           description: >
             An address of the smart contract governing  interest rate strategy.
