@@ -1303,6 +1303,14 @@ paths:
           schema:
             type: string
           example: "aave_v3"
+        - name: chain_slug
+          in: query
+          description: >
+            The slug of the chain to additionally filter the reserves by.
+          required: false
+          schema:
+            type: string
+          example: "polygon"
         - name: page
           in: query
           description: Page number, zero-indexed
