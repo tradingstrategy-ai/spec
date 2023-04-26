@@ -1417,6 +1417,123 @@ paths:
               schema:
                 $ref: "#/components/schemas/GenericErrorModel"
 
+  '/reserve/candles':
+    x-pyramid-route-name: web_reserve_candles
+    get:
+      operationId: web_reserve_candles
+      summary: |
+        Candle data for a particular reserve in a lending protocol.
+      description: |
+        The candles are sorted by their timestamps, oldest first.
+
+        The maximum number of candles of a particular type returned in the response is
+        limited to 10,000, and if necessary the most recent candles are omitted from the
+        result.
+
+        Mind that the data is sparse. If there was no data to generate a candle from,
+        the corrseponding candle for that timestamp will not exist in the response.
+        Or in other words, no forward-filling or other gap fill mechanism is performed by
+        the backend.
+      parameters:
+        - name: protocol_slug
+          in: query
+          description: The slug of the lending protocol.
+          required: true
+          schema:
+            type: string
+          example: "aave_v3"
+        - name: reserve_slug
+          in: query
+          description: >
+            The slug of the asset held by the reserve.
+          required: true
+          schema:
+            type: string
+          example: "wmatic"
+        - name: chain_slug
+          in: query
+          description: >
+            URL slug of the blockchain on which the lending protocol runs.
+          required: true
+          schema:
+            type: string
+          example: "polygon"
+        - name: time_bucket
+          in: query
+          description: >
+              What time bucket to use for the candle size.
+
+              Note that candle data might not exist for all buckets, especially the
+              shorter ones, in wich case 404 Not Found will be returned.
+
+          required: true
+          schema:
+            type: string
+            enum: [1m, 5m, 15m, 1h, 4h, 1d, 7d, 30d]
+          example: 1h
+        - name: candle_types
+          in: query
+          description: |
+            The type(s) of candles to retrieve. At least one candle type must be
+            specified.
+            A special type "all" can be specified as a shorthand to retrieve all
+            supported candle types.
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum: [stable_borrow_apr, variable_borrow_apr, supply_apr, all]
+            minItems: 1
+            uniqueItems: true
+        - name: start
+          in: query
+          description: |
+              When the candle fetch period starts.
+
+              Use UNIX UTC timestamp as an ISO 8601 formatted string.
+
+              This range parameter is inclusive. If not specified, it defaults to `end`
+              minus 100 * `time_bucket`.
+          required: false
+          schema:
+            type: string
+            format: iso8601
+          example: "2022-02-13T10:15:49"
+        - name: end
+          in: query
+          description: |
+              When the candle fetch period ends.
+
+              Use UNIX UTC timestamp as an ISO 8601 formatted string.
+
+              This range parameter is inclusive. If not specified, it defaults to `now()`.
+          required: false
+          schema:
+            type: string
+            format: iso8601
+          example: "2023-04-13"
+      tags:
+        - Lending protocol
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MinimalCandleList'
+        '404':
+          description: |
+            Reserve not found or no candle data for the selected period and time bucket.
+        "422":
+          description: Unexpected error - usually bad query input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorModel"
+
   '/top-momentum':
     x-pyramid-route-name: web_top_momentum
     get:
@@ -1997,6 +2114,44 @@ components:
             Number of individual trades executed during the candle time period.
 
           type: number
+
+    MinimalCandle:
+      description: |
+        One OHLC candle for the candle charts
+
+        [Read more about what trading candles are](https://tradingstrategy.ai/docs/glossary.html#term-Candle).
+      type: object
+      properties:
+        ts:
+          description: >
+            UNIX UTC timestamp as an ISO 8601 formatted string.
+          type: string
+          format: iso8601
+        o:
+          description: >
+            Open value of the candle
+          type: number
+          format: float
+        h:
+          description: >
+            High value of the candle
+          type: number
+          format: float
+        l:
+          description: >
+            Low value of the candle
+          type: number
+          format: float
+        c:
+          description: >
+            Close value of the candle
+          type: number
+          format: float
+      example:
+          {
+            "ts": "2023-03-21T16:00:00", "o": 100.86, "h": 101.02, "l": 99.89, "c": 100.12
+          }
+
     CandleList:
       description: |
 
@@ -2010,6 +2165,13 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Candle'
+
+    MinimalCandleList:
+      description: |
+        A list of candles with minimal data ordered from the oldest to the most recent.
+      type: array
+      items:
+        $ref: '#/components/schemas/MinimalCandle'
 
     TimeSpanTradeData:
       description: |
