@@ -1999,6 +1999,29 @@ components:
           type: number
           example: 0.0025
 
+        pair_tvl:
+          description: |
+            The total value locked number for the pair in USD.
+          type: number
+          example: 250511.6241
+
+        pair_tvl_last_updated:
+          description: |
+            The timestamp of the block at which the `pair_tvl` value, if available, was
+            last updated.
+
+            It is a UNIX UTC timestamp returned as an ISO 8601 formatted string.
+
+          type: string
+          format: timestamp
+          example: "2023-06-12T11:59:43.182594"
+
+        pair_tvl_last_block:
+            description: |
+              The block number at which the`pair_tvl` value was last updated.
+            type: integer
+            example: 17460244
+
     PaginatedPairSummary:
       description: >
           Iterate through a list of PairSummary responses
