@@ -1282,10 +1282,10 @@ paths:
               schema:
                 $ref: "#/components/schemas/GenericErrorModel"
 
-  '/reserves':
-    x-pyramid-route-name: web_reserves
+  '/lending-reserves':
+    x-pyramid-route-name: web_lending_reserves
     get:
-      operationId: web_reserves
+      operationId: web_lending_reserves
       summary:
           Get a list of reserves for a particular lending protocol.
       description: |
@@ -1299,7 +1299,7 @@ paths:
         - name: protocol_slug
           in: query
           description: The slug of the lending protocol.
-          required: true
+          required: false
           schema:
             type: string
           example: "aave_v3"
@@ -1369,10 +1369,10 @@ paths:
               schema:
                 $ref: "#/components/schemas/GenericErrorModel"
 
-  '/reserve/details':
-    x-pyramid-route-name: web_reserve_details
+  '/lending-reserve/details':
+    x-pyramid-route-name: web_lending_reserve_details
     get:
-      operationId: web_reserve_details
+      operationId: web_lending_reserve_details
       summary: |
         Information about a particular reserve in a lending protocol.
       parameters:
@@ -1417,10 +1417,10 @@ paths:
               schema:
                 $ref: "#/components/schemas/GenericErrorModel"
 
-  '/reserve/candles':
-    x-pyramid-route-name: web_reserve_candles
+  '/lending-reserve/candles':
+    x-pyramid-route-name: web_lending_reserve_candles
     get:
-      operationId: web_reserve_candles
+      operationId: web_lending_reserve_candles
       summary: |
         Candle data for a particular reserve in a lending protocol.
       description: |
@@ -2686,21 +2686,36 @@ components:
         Information about a reserve in a lending protocol.
 
       properties:
-        protocol_slug:
+        reserve_id:
           description: >
-            The slug of the lending protocol the reserve is a part of.
-          type: string
-          example: "aave_v3"
+            The internal ID of reserve.
+          type: integer
+          example: 1
         reserve_slug:
           description: >
             The slug of the asset held by the reserve.
           type: string
           example: "wmatic"
+        protocol_slug:
+          description: >
+            The slug of the lending protocol the reserve is a part of.
+          type: string
+          example: "aave_v3"
+        chain_id:
+          description: >
+            The ID of the chain.
+          type: integer
+          example: 137
         chain_slug:
           description: >
             The slug of the chain hosting the reserve.
           type: string
           example: "polygon"
+        asset_id:
+          description: >
+            The internal ID of the asset held by the reserve.
+          type: integer
+          example: 1234
         asset_name:
           description: >
             The name of the asset held by the reserve.
