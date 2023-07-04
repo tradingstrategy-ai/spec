@@ -267,7 +267,6 @@ paths:
             enum: [small, large]
             default: small
 
-      parameters:
         - name: theme
           in: query
           description: |
@@ -309,6 +308,115 @@ paths:
             application/json:
               schema:
                 type: object
+
+  '/charts':
+    x-pyramid-route-name: web_charts
+    get:
+      operationId: web_charts
+      summary: |
+        
+        Render various charts about the trade execution output.
+        
+        By default, output charts as interactive Plotly.js payload.
+
+      parameters:
+        - name: chart
+          in: query
+          description: |
+
+          required: true
+          schema:
+            type: string
+            enum: [cumulative_realised_profitability, equity, funding_flow]
+            default: cumulative_realised_profitability
+
+        - name: output
+          in: query
+          description: |
+            
+            What kind of output option (Plotly.js, SVG).
+
+          required: true
+          schema:
+            type: string
+            enum: [plotly]
+            default: plotly
+
+        - name: theme
+          in: query
+          description: |
+            
+            Color scheme options:
+            
+             * `light` - black on white charts
+            
+             * `dark` - white on black charts
+
+          required: false
+          schema:
+            type: string
+            enum: [light, dark]
+            default: dark
+
+      responses:
+        "200":
+          description: | 
+            Return the source code of the strategy. 
+          
+            Returns an empty string if the source code is not public. 
+
+          content:
+            application/json:
+              schema:
+                type: string
+
+        "422":
+          description: |
+          
+            Unexpected error - usually an internal error
+
+          content:
+            application/json:
+              schema:
+                type: object
+
+  '/file':
+    x-pyramid-route-name: web_file
+    get:
+      operationId: web_file
+      summary: |
+        
+        Serve various files related to the trading strategy and its backtest.
+        
+        These files are static in nature and are not supposed to change for 
+        the duration of trade-executor life time.
+
+      parameters:
+        - name: type
+          in: query
+          description: |
+
+          required: true
+          schema:
+            type: string
+            enum: [html, notebook]
+
+      responses:
+        "200":
+          description: | 
+            Return the asked file.  
+
+        "422":
+          description: |
+          
+            Unexpected error - usually an internal error
+
+          content:
+            application/json:
+              schema:
+                type: object
+
+
 components:
   securitySchemes:
     basicAuth:
