@@ -309,10 +309,10 @@ paths:
               schema:
                 type: object
 
-  '/charts':
-    x-pyramid-route-name: web_charts
+  '/chart':
+    x-pyramid-route-name: web_chart
     get:
-      operationId: web_charts
+      operationId: web_chart
       summary: |
         
         Render various charts about the trade execution output.
@@ -327,48 +327,21 @@ paths:
           required: true
           schema:
             type: string
-            enum: [cumulative_realised_profitability, equity, funding_flow]
-            default: cumulative_realised_profitability
-
-        - name: output
-          in: query
-          description: |
-            
-            What kind of output option (Plotly.js, SVG).
-
-          required: true
-          schema:
-            type: string
-            enum: [plotly]
-            default: plotly
-
-        - name: theme
-          in: query
-          description: |
-            
-            Color scheme options:
-            
-             * `light` - black on white charts
-            
-             * `dark` - white on black charts
-
-          required: false
-          schema:
-            type: string
-            enum: [light, dark]
-            default: dark
+            enum: [compounding_realised_profitability, total_equity, funding_flow]
 
       responses:
         "200":
           description: | 
-            Return the source code of the strategy. 
+            Return the WebChart object
           
-            Returns an empty string if the source code is not public. 
+            - Time-series of (timestamp, value) array
+            
+            - Metadata like help links
 
           content:
             application/json:
               schema:
-                type: string
+                type: object
 
         "422":
           description: |
