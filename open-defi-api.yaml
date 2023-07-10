@@ -716,11 +716,17 @@ paths:
 
         Fetch candle data for a single trading pair.
 
-        You need to resolve the symbolic trading pair name to `pair_id` primary key with `/pairs` or `/pair-details`
-        to call this API endpoint.
+        You need to resolve the symbolic trading pair name to `pair_id` primary key with
+        `/pairs` or `/pair-details` to call this API endpoint.
+
+        Candles are available for several different pair metrics and can be chosen by the
+        `candle_type` parameter. Mind that some candle types may not support all possible
+        time buckets, and time spans for which the data is available may differ.
+        In addition, not all candle types contain additiona stats, and may only contain
+        the base Open, High, Low, and Close values (+ candle timestamp).
 
         Candle response size is limited to 10,000 candles. Only the first 10,000 candles
-        since the start timestamp is returned.
+        since the start timestamp are returned.
 
         [Inspired by Bitfinex API](https://docs.bitfinex.com/reference#rest-public-candles).
 
@@ -750,6 +756,15 @@ paths:
             type: string
             enum: [1m, 5m, 15m, 1h, 4h, 1d, 7d, 30d]
           example: 1h
+        - name: candle_type
+          in: query
+          description: |
+            The pair metric to retrieve the candle data for. Normally the price (measured
+            in the quote token), but other candle types are also supported.
+          schema:
+            type: string
+            enum: [price, tvl]
+            default: price
         - name: start
           in: query
           description: |
@@ -802,7 +817,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CandleList'
+                oneOf:
+                  - $ref: '#/components/schemas/CandleList'
+                  - $ref: '#/components/schemas/MinimalCandleList'
         "422":
           description: Unexpected error
           content:
