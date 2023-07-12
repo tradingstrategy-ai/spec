@@ -490,7 +490,7 @@ paths:
           description: Slugs for DEXes to look up
           required: false
           style: form
-          explode: true
+          explode: false
           schema:
             type: array
             items:
@@ -503,7 +503,7 @@ paths:
           description: Slugs for blockchain to look up
           required: false
           style: form
-          explode: true
+          explode: false
           schema:
             type: array
             items:
@@ -672,7 +672,7 @@ paths:
 
           required: true
           style: form
-          explode: true
+          explode: false
           schema:
             type: array
             items:
@@ -955,7 +955,7 @@ paths:
 
           required: false
           style: form
-          explode: true
+          explode: false
           schema:
             type: array
             items:
@@ -1497,7 +1497,7 @@ paths:
             supported candle types.
           required: true
           style: form
-          explode: true
+          explode: false
           schema:
             type: array
             items:
