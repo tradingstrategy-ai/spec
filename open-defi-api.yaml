@@ -514,7 +514,7 @@ paths:
         - name: token_addresses
           in: query
           style: form
-          explode: true
+          explode: false
           description: |
             For querying trading pairs for a specific token.
 
