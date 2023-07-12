@@ -1358,7 +1358,10 @@ paths:
           schema:
             type: string
             default: reserve_slug
-            enum: [reserve_slug, asset_name, asset_symbol]
+            enum: [
+              asset_name, asset_symbol, chain_name, protocol_name, reserve_slug,
+              stable_borrow_apr_latest, supply_apr_latest, variable_borrow_apr_latest
+            ]
         - name: direction
           in: query
           description: |
