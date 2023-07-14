@@ -2561,6 +2561,33 @@ components:
           type: object
           $ref: '#/components/schemas/TimeSpanTradeData'
 
+    ReserveAdditionalDetails:
+      description: >
+        Additional details on a reserve.
+      type: object
+      properties:
+        supply_apr_latest:
+          description: |
+            The latest known supply APR value for the reserve.
+          type: number
+          format: float
+          nullable: true
+          example: 2.2631292441881867
+        stable_borrow_apr_latest:
+          description: |
+            The latest known stable borrow APR value for the reserve.
+          type: number
+          format: float
+          nullable: true
+          example: 5.434795079925008
+        variable_borrow_apr_latest:
+          description: |
+            The latest known variable borrow APR value for the reserve.
+          type: number
+          format: float
+          nullable: true
+          example: 3.478360639400065
+
     TokenOnChainInfo:
       description: >
         Basic info about a token from on-chain data.
@@ -2810,6 +2837,9 @@ components:
           type: string
           format: address
           example: "0x03733F4E008D36F2E37F0080FF1C8DF756622E6F"
+        additional_details:
+          type: object
+          $ref: '#/components/schemas/ReserveAdditionalDetails'
 
     TopMomentum:
       description: >
