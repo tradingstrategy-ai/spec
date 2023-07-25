@@ -1380,8 +1380,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaginatedReserveInfo'
-        "404":
-          description: No reserve data found for the lending protocol.
         "422":
           description: Unexpected error - usually bad query input.
           content:
