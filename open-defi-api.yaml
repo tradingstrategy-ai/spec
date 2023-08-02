@@ -1044,28 +1044,56 @@ paths:
     x-pyramid-route-name: web_xyliquidity
     get:
       operationId: web_xyliquidity
-      summary: Get the XY liquidity chart data for one pair
+      summary: Get the XY liquidity chart data for selected pairs.
       description: |
 
-        Fetch [XYLiquidity](https://tradingstrategy.ai/docs/programming/api/liquidity.html) data for a single trading pair.
+        Fetch [XYLiquidity](https://tradingstrategy.ai/docs/programming/api/liquidity.html)
+        data for selected trading pairs.
 
-        You need to resolve the symbolic trading pair name to `pair_id` primary key with `/pairs` or `/pair-details`
-        to call this API endpoint.
+        You need to resolve the symbolic trading pair name to `pair_id` primary key with
+        `/pairs` or `/pair-details` to call this API endpoint.
 
-        Liquidity sample response size is limited to 10,000 candles. Only the first 10,000 candles
-        since the start timestamp is returned.
+        If no candle data is found for a specific pair ID, the latter is omitted from
+        the response.
+
+        Liquidity sample response size is limited to 10,000 candles across all selected
+        pairs. Only the oldest 10,000 candles since the start timestamp are returned.
 
       parameters:
+        - name: pair_ids
+          in: query
+          description: |
+
+            Primary keys of the trading pairs to fetch the data for. A maximum of 100
+            IDs can be passed at a time.
+
+          required: false
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: integer
+              minimum: 1
+            minItems: 1
+            maxItems: 100
+            uniqueItems: true
+
         - name: pair_id
           in: query
           description: |
+
+            **WARNING:** Deprecated, use `pair_ids` instead. Will be removed in future
+            API versions.
 
             Primary key for the trading pair.
 
             [You can grab any trading pair from Trading Strategy website](https://tradingstrategy.ai/trading-view/trading-pairs).
             The primary key is displayed in as internal id.
 
-          required: true
+            Ignored if `pair_ids` parameter is also passed.
+
+          required: false
           schema:
             type: integer
             minimum: 1
@@ -1132,7 +1160,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/XYLiquiditySampleList'
+                $ref: '#/components/schemas/MultipairXYLiquidity'
         "422":
           description: Unexpected error
           content:
@@ -2365,6 +2393,7 @@ components:
             Number of individual trades executed during the candle time period.
 
           type: number
+
     XYLiquiditySampleList:
       description: |
 
@@ -2379,6 +2408,17 @@ components:
       items:
         $ref: '#/components/schemas/XYLiquiditySample'
 
+    MultipairXYLiquidity:
+      description: |
+
+        Liquidity samples for multiple pairs bundled in the same object.
+
+        Liquidity samples series for a particular pair can be accessed by a
+        stringified pair ID.
+
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/XYLiquiditySampleList'
 
     PairAdditionalDetails:
       description: >
