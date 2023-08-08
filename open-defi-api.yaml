@@ -714,9 +714,9 @@ paths:
       summary: Get the candle stick chart data for one trading pair
       description: |
 
-        Fetch candle data for a single trading pair.
+        Fetch candle data for selected trading pairs.
 
-        You need to resolve the symbolic trading pair name to `pair_id` primary key with
+        You need to resolve the symbolic trading pair names to their internal IDs with
         `/pairs` or `/pair-details` to call this API endpoint.
 
         Candles are available for several different pair metrics and can be chosen by the
@@ -731,20 +731,45 @@ paths:
         [Inspired by Bitfinex API](https://docs.bitfinex.com/reference#rest-public-candles).
 
       parameters:
+        - name: pair_ids
+          in: query
+          description: |
+
+            Primary keys of the trading pairs to fetch the candles for. A maximum of 100
+            IDs can be passed at a time.
+
+          required: false
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: integer
+              minimum: 1
+            minItems: 1
+            maxItems: 100
+            uniqueItems: true
+          example: "12,6,171"
+
         - name: pair_id
           in: query
           description: |
 
-            Primary key for the trading pair
+            **WARNING:** Deprecated, use `pair_ids` instead. Will be removed in future
+            API versions.
+
+            Primary key for the trading pair.
 
             [You can grab any trading pair from Trading Strategy website](https://tradingstrategy.ai/trading-view/trading-pairs).
             The primary key is displayed in as internal id.
 
-          required: true
+            Ignored if `pair_ids` parameter is also passed.
+
+          required: false
           schema:
             type: integer
             minimum: 1
-          example:
+          example: 7
         - name: time_bucket
           in: query
           description: >
@@ -807,7 +832,7 @@ paths:
           required: false
           schema:
             type: string
-          example: uni_v2
+          example: uniswap_v2
 
       tags:
         - Trading pair
@@ -818,8 +843,8 @@ paths:
             application/json:
               schema:
                 oneOf:
-                  - $ref: '#/components/schemas/CandleList'
-                  - $ref: '#/components/schemas/MinimalCandleList'
+                  - $ref: '#/components/schemas/MultipairCandleList'
+                  - $ref: '#/components/schemas/MultipairMinimalCandleList'
         "422":
           description: Unexpected error
           content:
@@ -1150,7 +1175,7 @@ paths:
           required: false
           schema:
             type: string
-          example: uni_v2
+          example: uniswap_v2
 
       tags:
         - Trading pair
@@ -2221,6 +2246,15 @@ components:
             "ts": "2023-03-21T16:00:00", "o": 100.86, "h": 101.02, "l": 99.89, "c": 100.12
           }
 
+    MultipairCandleList:
+      description: |
+        Candles for multiple pairs bundled in the same object.
+        Candles for a particular pair can be accessed by a
+        stringified pair ID.
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/CandleList'
+
     CandleList:
       description: |
 
@@ -2234,6 +2268,15 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Candle'
+
+    MultipairMinimalCandleList:
+      description: |
+        Minimal candles for multiple pairs bundled in the same object.
+        Minimal Candles for a particular pair can be accessed by a
+        stringified pair ID.
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/MinimalCandleList'
 
     MinimalCandleList:
       description: |
