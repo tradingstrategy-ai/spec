@@ -2668,14 +2668,24 @@ components:
           format: float
           nullable: true
           example: 3.478360639400065
-        raw_reserves_snapshot:
+        aggregated_reserve_data:
           description: |
-            A JSON snapshot of the lending protocol's reserves on chain. Returned in
-            its raw form, i.e. as returned from querying the chain node.
+            A JSON snapshot of the lending reserves from the chain.
+            Returned in  its raw form, i.e. as returned from querying the chain node.
 
             Can be empty if the snapshot is not available for any reason.
           type: object
           additionalProperties: true
+        base_currency_info:
+          description: |
+            The info on the base currency extracted from the lending reserve snapshot.
+          type: object
+          additionalProperties: true
+        block_number:
+          description: |
+            The block number at which the snapshot was taken.
+          type: integer
+          example: 1780220
 
     TokenOnChainInfo:
       description: >
