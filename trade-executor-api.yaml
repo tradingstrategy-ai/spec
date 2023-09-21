@@ -410,17 +410,7 @@ paths:
         
         Serve various icons as image files related to the trade executor.
         
-        By the default, return the round avatar icon used on trade-executor page.
-
-      parameters:
-        - name: type
-          in: query
-          description: |
-
-          required: false
-          schema:
-            type: string
-            enum: [html, notebook]
+        By the default, render the round avatar icon used on the strategy listing page.
 
       responses:
         "200":
