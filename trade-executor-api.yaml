@@ -323,11 +323,23 @@ paths:
         - name: chart
           in: query
           description: |
+            Which time-series data we are queryinh
 
           required: true
           schema:
             type: string
             enum: [compounding_realised_profitability, total_equity, funding_flow]
+
+        - name: source
+          in: query
+          description: |
+            Are we looking for live data or backtest
+
+          required: true
+          schema:
+            type: string
+            enum: [live_trading, backtest]
+            default: live_trading
 
       responses:
         "200":
@@ -378,6 +390,42 @@ paths:
         "200":
           description: | 
             Return the asked file.  
+
+        "422":
+          description: |
+          
+            Unexpected error - usually an internal error
+
+          content:
+            application/json:
+              schema:
+                type: object
+
+
+  '/icon':
+    x-pyramid-route-name: web_icon
+    get:
+      operationId: web_icon
+      summary: |
+        
+        Serve various icons as image files related to the trade executor.
+        
+        By the default, return the round avatar icon used on trade-executor page.
+
+      parameters:
+        - name: type
+          in: query
+          description: |
+
+          required: false
+          schema:
+            type: string
+            enum: [html, notebook]
+
+      responses:
+        "200":
+          description: | 
+            Return the asked image file.  
 
         "422":
           description: |
