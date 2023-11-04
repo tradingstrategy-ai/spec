@@ -564,10 +564,12 @@ paths:
           in: query
           description: |
 
-            What kind of sort options is available for the list
+            What kind of sort options are available for the list.
 
             The default `pair_id` sorting makes only sense for machine-to-machine actions.
             The recommended sort method is by descending volume (most interesting trading pairs first).
+
+            Pairs with a missing sort property (NULL field value) are placed last.
 
           required: false
           schema:
