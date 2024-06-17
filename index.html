@@ -118,7 +118,7 @@
     window.onload = function() {
         // Build a system
         const ui = SwaggerUIBundle({
-            url: "${spec_url}",
+            url: "${spec_url}".replace("http://", "https://"),  // Hot fix for broken URL handling in the web stack
             dom_id: '#swagger-ui',
             deepLinking: true,
             presets: [
