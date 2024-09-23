@@ -1073,6 +1073,9 @@ paths:
       operationId: web_xyliquidity
       summary: Get the XY liquidity chart data for selected pairs.
       description: |
+        
+        *Note*: This endpoint only works for Uniwap v2 liquidity data. For Uniswap v3 use `/candles` 
+        endpoint.
 
         Fetch [XYLiquidity](https://tradingstrategy.ai/docs/programming/api/liquidity.html)
         data for selected trading pairs.
