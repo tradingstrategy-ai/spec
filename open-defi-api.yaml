@@ -1067,6 +1067,118 @@ paths:
               schema:
                 $ref: "#/components/schemas/GenericErrorModel"
 
+  '/liquidity-candles-parquet':
+    x-pyramid-route-name: web_liquidity_candles_parquet
+    get:
+      operationId: web_liquidity_candles_parquet
+      summary:
+
+        Get the candle data for multiple trading pairs in JSONL format.
+
+      description: |
+
+        TBA 
+
+      parameters:
+        - name: pair_ids
+          in: query
+          description: |
+
+            Trading pair ids.
+
+            Trading pair ids are not stable. Translate your trading pair symbolic tickers by using `/pair-details` endpoint
+            before calling this API.
+            
+            The server has a maximum number of trading pairs it will serve in one request 
+            and will give you an error if you try to ask too many trading pairs once.
+
+          required: false
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: integer
+            uniqueItems: true
+
+        - name: time_bucket
+          in: query
+          description: >
+
+              What time bucket to use for the candle size.
+
+          required: true
+          schema:
+            type: string
+            enum: [1m, 5m, 15m, 1h, 4h, 1d, 7d, 30d]
+          example: 1h
+        - name: start
+          in: query
+          description: |
+
+              When the candle fetch period starts.
+
+              Use UNIX UTC timestamp, as ISO 8601 formatted string.
+              [Read more information about the time format](https://docs.python.org/3/library/datetime.html#datetime.datetime.fromisoformat).
+      
+              This range parameter is inclusive.
+            
+              If not given return all historical data starting from the genesis.
+
+          required: false
+          schema:
+            type: string
+            format: iso8601
+          example: "1970-01-01"
+        - name: end
+          in: query
+          description: |
+
+              When the candle fetch period ends.
+
+              Use UNIX UTC timestamp, as ISO 8601 formatted string.
+
+              If not specific this will be resolved to now().
+
+              This range parameter is inclusive.
+
+          required: false
+          schema:
+            type: string
+            format: iso8601
+            minimum: 0
+          example: "2022-01-02"
+
+        - name: max_bytes
+          in: query
+          description: |
+
+             How many bytes to serve before the stream is terminated.
+
+          required: false
+          schema:
+            type: integer
+            maximum: 100000000
+          example: 25000000
+
+      tags:
+        - Trading pair
+      responses:
+        "200":
+          description: OK
+          content:
+            application/jsonl+json:
+              schema:
+                # https://stackoverflow.com/a/53339910/315168
+                type: string
+                format: binary
+        "422":
+          description: Something wrong with the input parameters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorModel"
+
   '/xyliquidity':
     x-pyramid-route-name: web_xyliquidity
     get:
