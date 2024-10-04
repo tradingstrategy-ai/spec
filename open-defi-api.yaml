@@ -1208,7 +1208,7 @@ paths:
           example: 25000000
 
       tags:
-        - Trading pair
+        - Liquidity provision
       responses:
         "200":
           description: OK - return either JSONL or Parquet stream
