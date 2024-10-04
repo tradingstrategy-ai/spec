@@ -1067,10 +1067,10 @@ paths:
               schema:
                 $ref: "#/components/schemas/GenericErrorModel"
 
-  '/liquidity-candles':
-    x-pyramid-route-name: web_liquidity_candles
+  '/clmm-candles':
+    x-pyramid-route-name: web_clmm_candles
     get:
-      operationId: web_liquidity_candles
+      operationId: web_clmm_candles
       summary:
 
         Get Uniswap v3 concentrated liquidity market marking (CLMM) data for liquidity provider (LP) position backtesting.
@@ -1098,6 +1098,11 @@ paths:
         The response has a maximum site limit in bytes (`max_bytes`). If the response size
         exceeds this amount, the streaming is forcefully terminated and the resulting Parquet
         file is corrupted.
+        
+        Read more 
+        
+        - [CLMM](https://tradingstrategy.ai/glossary/clmm)
+        - [Liquidity provider](https://tradingstrategy.ai/glossary/liquidity-provider)
 
       parameters:
         - name: pair_ids
