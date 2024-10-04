@@ -1087,13 +1087,17 @@ paths:
         - Demeter should be used with `1m` candles - these give enough granularity to give a good approximation
           of the LP strategy performance, with the trade off its much faster to simulate than fully accurate
           individual block level simulation
-        - Use Parquet format if you are using Python
+        - Use Parquet format if you are using Python 
         - Use JSONL if you indent to display the data in web frontend
         - Time buckets cap at `1d`
         - Only Uniswap v3 pair ids supported
         
         The response is streaming. Remember to use `requests.get(stream=True)` parameter. However
         you still need to store the full file on the disk before you can use `pd.read_parquet`.
+        
+        The response has a maximum site limit in bytes (`max_bytes`). If the response size
+        exceeds this amount, the streaming is forcefully terminated and the resulting Parquet
+        file is corrupted.
 
       parameters:
         - name: pair_ids
