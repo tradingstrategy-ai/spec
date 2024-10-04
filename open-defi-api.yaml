@@ -1067,6 +1067,155 @@ paths:
               schema:
                 $ref: "#/components/schemas/GenericErrorModel"
 
+  '/liquidity-candles':
+    x-pyramid-route-name: web_liquidity_candles
+    get:
+      operationId: web_liquidity_candles
+      summary:
+
+        Get Uniswap v3 concentrated liquidity market marking (CLMM) data for liquidity provider (LP) position backtesting.
+
+      description: |
+        
+        This endpoint provides data for liquidity provider position backtesting.
+
+        - Get the data for multiple trading pairs either JSONL or Parquet formats
+        - Designed to be used with [Demeter](https://github.com/zelos-alpha/demeter/tree/master/demeter)
+          backtesting framework, but can be used with others
+        
+        For usage
+        - Demeter should be used with `1m` candles - these give enough granularity to give a good approximation
+          of the LP strategy performance, with the trade off its much faster to simulate than fully accurate
+          individual block level simulation
+        - Use Parquet format if you are using Python
+        - Use JSONL if you indent to display the data in web frontend
+        - Time buckets cap at `1d`
+        - Only Uniswap v3 pair ids supported
+        
+        The response is streaming. Remember to use `requests.get(stream=True)` parameter. However
+        you still need to store the full file on the disk before you can use `pd.read_parquet`.
+
+      parameters:
+        - name: pair_ids
+          in: query
+          description: |
+
+            Trading pair ids.
+            
+            Pairs must belong to Uniswap v3 DEX.
+
+            Trading pair ids are not stable. Translate your trading pair symbolic tickers by using `/pair-details` endpoint
+            before calling this API.
+            
+            The server has a maximum number of trading pairs it will serve in one request 
+            and will give you an error if you try to ask too many trading pairs once.
+
+          required: false
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: integer
+            uniqueItems: true
+
+        - name: time_bucket
+          in: query
+          description: >
+
+              What time bucket to use for the candle size.
+
+          required: true
+          schema:
+            type: string
+            enum: [1m, 5m, 15m, 1h, 4h, 1d]
+          example: 1h
+
+        - name: format
+          in: query
+          description: >
+
+            The output format of the data.
+            
+            Either JSONL or Parquet.
+            
+            - If not given use JSONL.
+            - JSONL is designed for web frontends
+            - Parquet is designed for Python consumption
+
+          required: true
+          schema:
+            type: string
+            enum: [jsonl, parquet]
+          example: parquet
+
+        - name: start
+          in: query
+          description: |
+
+              When the candle fetch period starts.
+
+              Use UNIX UTC timestamp, as ISO 8601 formatted string.
+              [Read more information about the time format](https://docs.python.org/3/library/datetime.html#datetime.datetime.fromisoformat).
+      
+              This range parameter is inclusive.
+            
+              If not given return all historical data starting from the genesis.
+
+          required: false
+          schema:
+            type: string
+            format: iso8601
+          example: "1970-01-01"
+        - name: end
+          in: query
+          description: |
+
+              When the candle fetch period ends.
+
+              Use UNIX UTC timestamp, as ISO 8601 formatted string.
+
+              If not specific this will be resolved to now().
+
+              This range parameter is inclusive.
+
+          required: false
+          schema:
+            type: string
+            format: iso8601
+            minimum: 0
+          example: "2022-01-02"
+
+        - name: max_bytes
+          in: query
+          description: |
+
+             How many bytes to serve before the stream is terminated.
+
+          required: false
+          schema:
+            type: integer
+            maximum: 100000000
+          example: 25000000
+
+      tags:
+        - Trading pair
+      responses:
+        "200":
+          description: OK - return either JSONL or Parquet stream
+          content:
+            application/octet-stream:
+              schema:
+                # https://stackoverflow.com/a/53339910/315168
+                type: string
+                format: binary
+        "422":
+          description: Something wrong with the input parameters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorModel"
+
   '/xyliquidity':
     x-pyramid-route-name: web_xyliquidity
     get:
