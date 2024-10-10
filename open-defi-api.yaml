@@ -642,6 +642,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GenericErrorModel"
+
   '/trading-pair-data-availability':
     x-pyramid-route-name: web_trading_pair_data_availability
     get:
@@ -1763,6 +1764,83 @@ paths:
             Reserve not found or no candle data for the selected period and time bucket.
         "422":
           description: Unexpected error - usually bad query input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorModel"
+
+  '/top':
+    x-pyramid-route-name: web_top
+    get:
+      operationId: web_top
+      summary: Top pairs by a chosen criteria in chosen time frame.
+      description: |
+
+        This endpoint is designed to scan new trading pairs to be included in a trading universe. 
+        
+        Note that the result might be based on old data, and does not return the most fresh pairs,
+        due to data processing delays. So when you call this method `24:00` it does not have 
+        pairs for yesterday ready yet.
+
+      parameters:
+        - name: method
+          in: query
+          description: | 
+          
+            What kind of criteria we will use to choose the pairs.
+            
+            The default is `sorted-by-liquidity-with-filtering`
+            
+            - `sorted-by-liquidity-with-filtering`: Get all volatile trading pairs. Exclude stablecoins.
+              Exclude derivative tokens (stETH vs. ETH). Exclude duplicates and pick one with the best trading
+              fee excluding 1 BPS tier.
+
+          required: false
+          schema:
+            type: string
+            enum: [sorted-by-liquidity-with-filtering]
+            default: sorted-by-liquidity-with-filtering
+
+        - name: time_bucket
+          in: query
+          description: |
+
+            What time bucket to use for the candle time frame.
+            
+            Currently only supports daily.
+
+          required: true
+          schema:
+            type: string
+            enum: [1d]
+            default: 1d
+          example: 1d
+
+        - name: limit
+          in: query
+          description: |
+
+              How many pairs to return from the top.
+            
+              We may return a different amount of pairs, give or add some, 
+              as the filtering queries cannot know the number of tokens returned 
+              until the reply is complete.
+
+          required: true
+          schema:
+            type: integer
+            default: 100
+          example: 100
+
+      tags:
+        - Trading signal
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json
+        "422":
+          description: Unexpected error
           content:
             application/json:
               schema:
