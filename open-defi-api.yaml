@@ -1837,8 +1837,6 @@ paths:
       responses:
         "200":
           description: OK
-          content:
-            application/json
         "422":
           description: Unexpected error
           content:
