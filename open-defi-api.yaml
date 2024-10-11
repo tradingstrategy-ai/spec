@@ -1832,6 +1832,33 @@ paths:
             default: 100
           example: 100
 
+        - name: exchange_slugs
+          in: query
+          description: Slugs for DEXes to look up
+          required: false
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+            uniqueItems: true
+          example:
+            - uniswap-v2,uniswap-v3
+        - name: chain_slugs
+          in: query
+          description: Slugs for blockchain to look up
+          required: false
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+            uniqueItems: true
+          example:
+            - ethereum
+
       tags:
         - Trading signal
       responses:
