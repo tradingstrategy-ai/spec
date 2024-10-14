@@ -1776,11 +1776,22 @@ paths:
       summary: Top pairs by a chosen criteria in chosen time frame.
       description: |
 
-        This endpoint is designed to scan new trading pairs to be included in a trading universe. 
-        
-        Note that the result might be based on old data, and does not return the most fresh pairs,
+        This endpoint is designed to scan new trading pairs to be included in a trading universe.
+        It ranks and filters the daily/weekly/etc. interesting trading pairs by a criteria.
+                
+        The result data is asynchronously filled, and may not return the most fresh situation,
         due to data processing delays. So when you call this method `24:00` it does not have 
-        pairs for yesterday ready yet.
+        pairs for yesterday ready yet. The results may vary, but should reflect the look back of last 24h. 
+                
+        Various heuristics is applied to the result filtering, like excluding stable pairs,
+        derivative tokens, choosing the trading pair with the best fee, etc.
+        
+        When you store the result, you need to use tuple `(chain id, pool address)` as the persistent key.
+        Any integer primary keys may change over long term. 
+        
+        For the result format documentation, see `tradingstrategy.top` Python module.
+
+        **This API is still under heavy development**.
 
       parameters:
         - name: method
