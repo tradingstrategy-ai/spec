@@ -1882,6 +1882,67 @@ paths:
               schema:
                 $ref: "#/components/schemas/GenericErrorModel"
 
+  '/token-metadata-jsonl':
+    x-pyramid-route-name: web_token_metadata_jsonl
+    get:
+      operationId: web_token_metadata_jsonl
+      summary: Token metadata
+      description: |
+
+        Get token metadata
+        
+        - Name and symbol
+        
+        - Trading pairs
+        
+        - TokenSniffer metadata
+        
+        - Coingecko metadata
+        
+        The response is streamed in JSONL format.
+        
+        For the result format documentation, see `tradingstrategy.client.Client` Python API.
+
+        **This API is still under heavy development**.
+
+      parameters:
+
+        - name: chain_slug
+          in: query
+          description: Slugs for blockchain to look up
+          required: false
+          style: form
+          explode: false
+          schema:
+            type: string
+          example:
+            - ethereum
+
+        - name: addresses
+          in: query
+          description: Token ERC-20 addresses
+          required: false
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: string
+            uniqueItems: true
+          example:
+            - 0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9
+      tags:
+        - Trading signal
+      responses:
+        "200":
+          description: OK
+        "422":
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorModel"
+
   '/top-momentum':
     x-pyramid-route-name: web_top_momentum
     get:
