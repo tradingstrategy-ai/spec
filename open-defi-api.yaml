@@ -1226,6 +1226,164 @@ paths:
               schema:
                 $ref: "#/components/schemas/GenericErrorModel"
 
+  '/tvl':
+    x-pyramid-route-name: web_tvl
+    get:
+      operationId: web_tvl
+      summary:
+
+        Get TVL candles streamed as a Parquet file.
+
+      description: |
+        
+        This endpoint provides data for TVL for backtesting and live trading.
+
+        - Read Uniswap v2 total value locked (TVL) for liquidity        
+        - TVL is one-sided (/WETH or /USDC side only)
+        - Get the data for multiple trading pairs in Parquet format
+        - Main use case is to build trading universe with pairs with sufficient liquidity (`min_tvl` parameter)
+        - Efficiently stream data as Parquet
+        
+        The response is streaming. Remember to use `requests.get(stream=True)` parameter. However
+        you still need to store the full file on the disk before you can use `pd.read_parquet`.
+        
+        The response has a maximum site limit in bytes (`max_bytes`). If the response size
+        exceeds this amount, the streaming is forcefully terminated and the resulting Parquet
+        file is corrupted.
+        
+        The Parquet file will have the following columns
+        - pair_id
+        - bucket
+        - open
+        - high
+        - low 
+        - close
+
+      parameters:
+        - name: mode
+          in: query
+          description: >
+
+            Query format.
+            
+            Either specify pair ids directly or use `min_tvl`
+
+          required: true
+          schema:
+            type: string
+            enum: [pair_ids, min_tvl]
+          example: parquet
+
+        - name: pair_ids
+          in: query
+          description: |
+
+            Trading pair ids.
+
+          required: false
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: integer
+            uniqueItems: true
+
+        - name: exchange_ids
+          in: query
+          description: |
+
+            Exchange ids when using `min_tvl` query.
+
+          required: false
+          style: form
+          explode: false
+          schema:
+            type: array
+            items:
+              type: integer
+            uniqueItems: true
+
+        - name: min_tvl
+          in: query
+          description: |
+
+            Return data only for trading pairs where lowest TVL is higher than `min_tvl`
+            during the period of `start` - `end`.
+
+          required: false
+          style: form
+          explode: false
+          schema:
+            type: number
+        - name: time_bucket
+          in: query
+          description: >
+
+              What time bucket to use for the candle size.
+            
+              Must be higher than 1d.
+
+          required: true
+          schema:
+            type: string
+            enum: [1d, 7d, 30d]
+          example: 1d
+
+        - name: start
+          in: query
+          description: |
+
+              When the candle fetch period starts.
+
+              Use UNIX UTC timestamp, as ISO 8601 formatted string.
+              [Read more information about the time format](https://docs.python.org/3/library/datetime.html#datetime.datetime.fromisoformat).
+      
+              This range parameter is inclusive.
+            
+              If not given return all historical data starting from the genesis.
+
+          required: false
+          schema:
+            type: string
+            format: iso8601
+          example: "1970-01-01"
+        - name: end
+          in: query
+          description: |
+
+              When the candle fetch period ends.
+
+              Use UNIX UTC timestamp, as ISO 8601 formatted string.
+
+              If not specific this will be resolved to now().
+
+              This range parameter is inclusive.
+
+          required: false
+          schema:
+            type: string
+            format: iso8601
+            minimum: 0
+          example: "2022-01-02"
+      tags:
+        - Liquidity provision
+      responses:
+        "200":
+          description: OK - return Parquet stream
+          content:
+            application/octet-stream:
+              schema:
+                # https://stackoverflow.com/a/53339910/315168
+                type: string
+                format: binary
+        "422":
+          description: Something wrong with the input parameters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenericErrorModel"
+
   '/xyliquidity':
     x-pyramid-route-name: web_xyliquidity
     get:
