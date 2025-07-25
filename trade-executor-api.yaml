@@ -427,6 +427,80 @@ paths:
               schema:
                 type: object
 
+  '/chart-registry/render':
+    x-pyramid-route-name: web_chart_render
+    get:
+      operationId: web_chart_render
+      summary: |
+        
+        Render charts provided by the strategy and registered in the chart registry.
+        
+        Return HTML, PNG or SVG  payload.
+
+      parameters:
+        - name: chart_id
+          in: query
+          description: |
+            Chart id to render
+
+          required: true
+          schema:
+            type: string
+
+        - name: pair_ids
+          in: query
+          description: |
+            For charts that have one or multiple pairs as input.
+
+          required: False
+          schema:
+            type: string
+
+      responses:
+        "200":
+          description: | 
+            Return HTML, PNG or SVG payload of the chart.
+
+          content:
+            application/json:
+              schema:
+                type: object
+
+        "422":
+          description: |
+          
+            Unexpected error - usually an internal error
+
+          content:
+            application/json:
+              schema:
+                type: object
+
+  '/chart-registry':
+    x-pyramid-route-name: web_chart_registry
+    get:
+      operationId: web_chart_registry
+      summary: |
+        
+        List of charts provided by this strategy.
+        
+        Discover what you can fetch through /chart-registry/render endpoint.
+
+      responses:
+        "200":
+          description: | 
+            Return the asked image file.  
+
+        "422":
+          description: |
+          
+            Unexpected error - usually an internal error
+
+          content:
+            application/json:
+              schema:
+                type: object
+
 
 components:
   securitySchemes:
