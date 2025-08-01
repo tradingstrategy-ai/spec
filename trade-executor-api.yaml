@@ -501,6 +501,28 @@ paths:
               schema:
                 type: object
 
+  '/chart-registry/pairs':
+    x-pyramid-route-name: web_chart_pairs
+    get:
+      operationId: web_chart_pairs
+      summary: |
+        
+        List of trading pairs we can use in the chart rendering.
+
+      responses:
+        "200":
+          description: | 
+            Return the asked image file.  
+
+        "422":
+          description: |
+          
+            Unexpected error - usually an internal error
+
+          content:
+            application/json:
+              schema:
+                type: object
 
 components:
   securitySchemes:
