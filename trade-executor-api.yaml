@@ -384,7 +384,7 @@ paths:
           required: true
           schema:
             type: string
-            enum: [html, notebook]
+            enum: [html, notebook, deployment-report]
 
       responses:
         "200":
